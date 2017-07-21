@@ -18,11 +18,12 @@ import java.io.IOException;
  * Created by kimha on 20/07/2017.
  */
 
-public class RadioService extends Service implements MediaPlayer.OnPreparedListener {
+public class RadioService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
     private static final String TAG = "RadioService";
 
     private MediaPlayer mPlayer;
     private RadioBinder mRadioBinder = new RadioBinder();
+    private boolean mIsClick = true;
 
     @Override
     public void onCreate() {
@@ -45,37 +46,43 @@ public class RadioService extends Service implements MediaPlayer.OnPreparedListe
 
         //set listeners
         mPlayer.setOnPreparedListener(this);
-        mPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-            @Override
-            public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
-                Log.d(TAG, "onBufferingUpdate: ");
-            }
-        });
+        mPlayer.setOnErrorListener(this);
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
+        mIsClick = true;
+        Log.d(TAG, "onPrepared: ");
         mediaPlayer.start();
         sendMessageToActivity(true);
-
     }
 
     public void playRadio(String url) {
-        if (mPlayer.isPlaying() || mPlayer != null) {
+        if (mIsClick) {
             mPlayer.reset();
-            mPlayer.release();
-            mPlayer = null;
+            //set data source
+            try {
+                mPlayer.setDataSource(url);
+            } catch (IOException e) {
+                Log.d(TAG, "playRadio: ");
+                e.printStackTrace();
+            }
+            Log.d(TAG, "playRadio: 1111111111");
+            mPlayer.setOnPreparedListener(this);
+            mIsClick = false;
+            try {
+                mPlayer.prepareAsync();
+            } catch (Exception e) {
+                Log.e(TAG, "playRadio: 2222" + e.toString());
+            }
         }
-        mPlayer = new MediaPlayer();
-        //set data source
-        try {
-            mPlayer.setDataSource(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mPlayer.setOnPreparedListener(this);
-        mPlayer.prepareAsync();
+    }
 
+    @Override
+    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+        Log.d(TAG, "onError: ");
+        mIsClick = true;
+        return true;
     }
 
     public class RadioBinder extends Binder {

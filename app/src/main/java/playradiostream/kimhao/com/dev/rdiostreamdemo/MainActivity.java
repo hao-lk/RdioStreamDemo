@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private MediaPlayer player;
     private String mChannelLink;
     private LinearLayout linearLayout;
     private TextView tvNameChanel;
@@ -29,7 +27,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String CHANEL_VOV_1 = "http://stream2.mobiradio.vn/vovradio/vov1backup.stream/chunklist.m3u8";
     public static final String CHANEL_VOV_3 = "http://stream2.mobiradio.vn/vovradio/vov3backup.stream/chunklist.m3u8";
     public static final String CHANEL_LAM_DONG = "http://stream2.mobiradio.vn/radiotv/lamdong/chunklist.m3u8";
-    public static final String CHANEL_TUYEN_QUANG = "http://stream2.mobiradio.vn/radiotv/tuyenquang/chunklist.m3u8";
+    //    public static final String CHANEL_TUYEN_QUANG = "http://stream2.mobiradio.vn/radiotv/tuyenquang/chunklist.m3u8";
+    public static final String CHANEL_TUYEN_QUANG = "http://117.6.129.102:1901/live/vovgthcm.sdp/playlist.m3u8";
+    public static final String CHANEL_MUSIC = "http://118.69.80.81:8000/http://118.69.80.81:8000?play.m3u8";
+//    public static final String CHANEL_MUSIC = "http://117.6.129.102:1901/live/vovgthcm.sdp/playlist.m3u8";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn3.setOnClickListener(this);
         Button btn4 = (Button) findViewById(R.id.btn_4);
         btn4.setOnClickListener(this);
+        Button btn5 = (Button) findViewById(R.id.btn_5);
+        btn5.setOnClickListener(this);
         tvNameChanel = (TextView) findViewById(R.id.tv_name_radio);
     }
 
@@ -84,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case CHANEL_VOV_3:
                 nameChanel = "FM - VOV 3";
+                break;
+            case CHANEL_MUSIC:
+                nameChanel = "FM - MUSIC";
                 break;
         }
         tvNameChanel.setText(nameChanel);
@@ -111,6 +117,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_4:
                 mChannelLink = CHANEL_TUYEN_QUANG;
+                startRadio();
+                break;
+            case R.id.btn_5:
+                mChannelLink = CHANEL_MUSIC;
                 startRadio();
                 break;
         }
