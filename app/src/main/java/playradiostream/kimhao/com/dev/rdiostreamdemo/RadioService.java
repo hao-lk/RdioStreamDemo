@@ -23,7 +23,7 @@ public class RadioService extends Service implements MediaPlayer.OnPreparedListe
 
     private MediaPlayer mPlayer;
     private RadioBinder mRadioBinder = new RadioBinder();
-    private boolean mIsClick = true;
+    private boolean mPlay;
 
     @Override
     public void onCreate() {
@@ -51,14 +51,14 @@ public class RadioService extends Service implements MediaPlayer.OnPreparedListe
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        mIsClick = true;
+        mPlay = true;
         Log.d(TAG, "onPrepared: ");
         mediaPlayer.start();
         sendMessageToActivity(true);
     }
 
     public void playRadio(String url) {
-        if (mIsClick) {
+        if (mPlay) {
             mPlayer.reset();
             //set data source
             try {
@@ -69,7 +69,7 @@ public class RadioService extends Service implements MediaPlayer.OnPreparedListe
             }
             Log.d(TAG, "playRadio: 1111111111");
             mPlayer.setOnPreparedListener(this);
-            mIsClick = false;
+            mPlay = false;
             try {
                 mPlayer.prepareAsync();
             } catch (Exception e) {
@@ -81,7 +81,7 @@ public class RadioService extends Service implements MediaPlayer.OnPreparedListe
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
         Log.d(TAG, "onError: ");
-        mIsClick = true;
+        mPlay = true;
         return true;
     }
 
