@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -23,8 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tvNameChanel;
     private RadioService mRadioService;
     private Intent mPlayIntent;
+    public MediaPlayer mediaPlayer;
 
-    public static final String CHANEL_VOV_1 = "http://stream2.mobiradio.vn/vovradio/vov1backup.stream/chunklist.m3u8";
+    public static final String CHANEL_VOV_1 = "http://118.179.219.244:8000/;audio/mpeg";
     public static final String CHANEL_VOV_3 = "http://stream2.mobiradio.vn/vovradio/vov3backup.stream/chunklist.m3u8";
     public static final String CHANEL_LAM_DONG = "http://stream2.mobiradio.vn/radiotv/lamdong/chunklist.m3u8";
     //    public static final String CHANEL_TUYEN_QUANG = "http://stream2.mobiradio.vn/radiotv/tuyenquang/chunklist.m3u8";
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void startRadio() {
+        Log.d(TAG, "startRadio: ");
         mRadioService.playRadio(mChannelLink);
     }
 
